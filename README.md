@@ -16,14 +16,20 @@ El cliente final también tiene cuenta y se loguea, pero esto no significa un lo
 
 ```
 .
-├── backend/      # API (Java + Spring Boot)
-├── frontend/     # Cliente web (React + TypeScript)
+├── backend/      # API (Java + Spring Boot) — ver su README
+├── frontend/     # Cliente web (React + TypeScript) — ver su README
 └── docs/
     ├── negocio/       # Especificación funcional
     └── tecnologias/   # Arquitectura y decisiones técnicas
 ```
 
+La documentación está dividida según su ciclo de vida: en `docs/` vive **el qué y el por qué** (negocio, modelo de datos, decisiones transversales), que cambia cuando cambia el producto. En el README de cada proyecto vive **el cómo** (estructura, capas, tests, setup), que cambia cuando cambia el código.
+
 ## 3. Documentación
+
+### Proyectos
+- [Backend](backend/README.md) — estructura de paquetes, regla de capas, testing, seeds.
+- [Frontend](frontend/README.md) — estructura de carpetas, regla de capas, testing.
 
 ### Negocio
 - [Requerimientos funcionales](docs/negocio/requerimientos-funcionales.md)

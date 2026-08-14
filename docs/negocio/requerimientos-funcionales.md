@@ -2,7 +2,7 @@
 Superadmin
 Login (panel de sistema).
 CRUD de empresas (alta, consulta, edición, desactivación — nunca eliminación física).
-Alta de empresa: formulario único que crea en la misma transacción la Empresa (estado ACTIVA) y el Usuario admin asociado (estado PENDIENTE_ACTIVACION), generando el slug de la URL pública y disparando el link de activación (WhatsApp o mail).
+Alta de empresa: formulario único que crea en la misma transacción la `Company` (estado `ACTIVE`) y el `User` admin asociado (estado `PENDING_ACTIVATION`), generando el slug de la URL pública y disparando el link de activación (WhatsApp o mail).
 Reenviar el link de activación si el admin no lo usó a tiempo.
 Ver dashboard general de la plataforma (empresas activas/inactivas, altas por mes, ranking de empresas por cantidad de turnos generados, distribución por rubro).
 Ver la página pública de cualquier empresa (botón "Ver página pública"), sin poder reservar con esa sesión.
