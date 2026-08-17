@@ -88,9 +88,14 @@ Por eso un servicio corto (ej. "Corte", 30 min) puede tener disponible un horari
 
 #### Turnero — reserva manual del admin
 
-Es una vista parecida a la del cliente (mismo selector de servicio/horario), pero en vez de que el cliente cargue sus datos, los carga el admin (nombre, teléfono del cliente que llamó o vino personalmente). Al guardar, se dispara la misma notificación de confirmación que en una reserva online. **La cancelación del turno se hace desde acá, desde el turnero del panel.**
+Es una vista parecida a la del cliente (mismo selector de servicio/horario). Antes de cargar los datos, el admin indica si el cliente tiene cuenta en la plataforma:
 
-> **Problema detectado:** si el admin carga un turno con nombre/teléfono de alguien que nunca se registró en la web, ese cliente no tiene cuenta, así que no puede entrar a "Mis turnos" para cancelarlo por su cuenta.
+- **Si tiene cuenta:** lo busca y selecciona desde un desplegable (por nombre, teléfono o email) y el turno queda vinculado a su `clientId`, igual que una reserva online. Después, ese cliente puede loguearse y autogestionar el turno desde "Mis turnos" como cualquier otro.
+- **Si no tiene cuenta:** el admin carga nombre y teléfono sueltos (`manualClientName`/`manualClientPhone`), sin `clientId`. Ese turno no es autogestionable por el cliente.
+
+Al guardar, se dispara la misma notificación de confirmación que en una reserva online. **La cancelación de un turno sin cuenta vinculada se hace desde acá, desde el turnero del panel.**
+
+> **Problema detectado:** si el turno queda sin cuenta vinculada (cliente sin cuenta en la plataforma), esa persona no puede entrar a "Mis turnos" para cancelarlo por su cuenta.
 >
 > **Solución para el MVP:** el admin cancela desde el turnero. Un link con token en el mensaje de confirmación para autogestionar la cancelación sin cuenta es técnicamente simple de agregar (un UUID en la URL, no requiere cuenta), pero queda anotado como **mejora post-MVP** para no sumar otro flujo de cancelación distinto al ya definido. Por eso, en esta versión, el mensaje de confirmación **no lleva ningún link**.
 
@@ -119,7 +124,7 @@ La página pública (`plataforma.com/{slug}`) es visible sin login: cualquiera v
 
 ### 7.5 Mis turnos, cancelación y reprogramación
 
-"Mis turnos" es una tabla simple: fecha, servicio, empresa, estado. Sin secciones separadas de "historial" — el mismo listado, filtrable, cubre turnos futuros y pasados.
+"Mis turnos" es una tabla simple: fecha, servicio, empresa, estado. No hay una sección de historial aparte — un job programado pasa los turnos a `COMPLETED` automáticamente una vez que su horario ya pasó (los `CANCELLED` quedan como están), y la tabla se ordena/filtra por estado; los `COMPLETED` cumplen la función de historial.
 
 - **Cancelar:** disponible hasta **3 horas antes** del turno (valor inicial ajustable). El turno pasa a estado `CANCELLED` y se muestra en gris, sin acción de reactivación desde ahí.
 - **Reprogramar:** dentro del mismo plazo, el cliente elige un nuevo horario disponible; se actualiza el mismo registro de turno (no se crea uno nuevo), guardando la fecha anterior y estado `RESCHEDULED`.

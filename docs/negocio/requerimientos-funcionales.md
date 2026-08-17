@@ -3,7 +3,7 @@
 ### Superadmin
 - Login (panel de sistema).
 - CRUD de empresas (alta, consulta, edición, desactivación — nunca eliminación física).
-- Alta de empresa: formulario único que crea en la misma transacción la `Company` (estado `ACTIVE`) y el `User` admin asociado (estado `PENDING_ACTIVATION`), generando el slug de la URL pública y disparando el link de activación (WhatsApp o mail).
+- Alta de empresa: formulario único que crea en la misma transacción la `Company` (estado `ACTIVE`) y el `User` admin asociado (estado `PENDING_ACTIVATION`), generando el slug de la URL pública y disparando el link de activación por WhatsApp.
 - Reenviar el link de activación si el admin no lo usó a tiempo.
 - Ver dashboard general de la plataforma (empresas activas/inactivas, altas por mes, ranking de empresas por cantidad de turnos generados, distribución por rubro).
 - Ver la página pública de cualquier empresa (botón "Ver página pública"), sin poder reservar con esa sesión.
@@ -16,7 +16,7 @@
 - CRUD de horarios de atención: configuración recurrente por día de la semana (rango horario + intervalo), configurada una sola vez y editable cuando haga falta. Al editarla, si hay turnos ya reservados fuera del nuevo rango, el sistema avisa que se mantienen igual (no se cancelan solos).
 - Personalización básica de su página pública (logo, color).
 - Ver turnero/agenda de su empresa, filtrable por estado.
-- Reservar un turno manualmente con los datos del cliente que llamó o vino personalmente (nombre, teléfono), sin requerir que ese cliente tenga cuenta.
+- Reservar un turno manualmente: si el cliente tiene cuenta, vincularlo buscándolo y seleccionándolo desde un desplegable; si no tiene cuenta, cargar sus datos sueltos (nombre, teléfono).
 - Cancelar cualquier turno de su empresa (reservado online o cargado manualmente), sin restricción horaria, dejando registrado el motivo.
 - Ver "Mi página pública" (solo lectura, se arma sola con lo que carga acá).
 
@@ -35,3 +35,4 @@
 - Validación de anticipación mínima (no reservar con menos de 30 min de anticipación) y de plazo máximo de cancelación/reprogramación (3hs antes).
 - Envío de notificaciones automáticas (NotificationService desacoplado del canal) ante reserva confirmada, cancelación y reprogramación.
 - Cancelación automática de turnos pendientes y notificación a los clientes afectados cuando una empresa se desactiva.
+- Transición automática de turnos a `COMPLETED` una vez pasado su horario, vía job programado (excepto los `CANCELLED`, que quedan como están).

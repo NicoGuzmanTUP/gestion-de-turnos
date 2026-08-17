@@ -97,3 +97,4 @@ Reglas duras:
 - Manejo de rutas protegidas por rol.
 - Cómo se aplica la personalización por empresa (logo y color primario) en la página pública.
 - ESLint + Prettier integrados en CI.
+- Componente de búsqueda/autocomplete de clientes para el turnero manual del admin (elegir entre cliente con cuenta o carga manual).

@@ -38,7 +38,7 @@ El superadmin desactiva una empresa. Se bloquea el login de su admin, la página
 ### UC8 - Reservar un turno manualmente
 **Actor:** Admin de empresa
 
-El admin usa el mismo turnero para cargar un turno con los datos del cliente que llamó o vino personalmente (nombre, teléfono). Al guardar, se dispara la misma notificación de confirmación que en una reserva online. Si ese cliente no tiene cuenta en la plataforma, no podrá autogestionar el turno desde "Mis turnos" — para cancelar debe contactar al negocio y es el admin quien lo hace desde el turnero.
+El admin usa el mismo turnero para cargar un turno manual. Si el cliente tiene cuenta en la plataforma, lo busca y selecciona desde un desplegable, vinculando el turno a su `clientId` — después puede autogestionarlo desde "Mis turnos" como cualquier otro. Si no tiene cuenta, el admin carga sus datos sueltos (nombre, teléfono); en ese caso, para cancelar debe contactar al negocio y es el admin quien lo hace desde el turnero.
 
 ### UC9 - Dar de baja un servicio con turnos pendientes
 **Actor:** Admin de empresa

@@ -10,8 +10,8 @@ A continuación se detallan las herramientas, marcos de trabajo e infraestructur
 | **Frontend** | **React + TypeScript (Vite)** | Arquitectura basada en componentes reutilizables (ideal para las páginas públicas de cada empresa); tipado fuerte para modelar las entidades del dominio de forma segura. |
 | **Base de Datos** | **PostgreSQL** *(ej. Neon)* | Motor relacional idóneo por las relaciones estrictas entre empresas, servicios, usuarios y turnos, garantizando la integridad referencial necesaria al validar la disponibilidad. |
 | **ORM** | **Spring Data JPA / Hibernate** | Abstracción para el manejo de entidades y soporte de *locking* pesimista para evitar carreras de condición (*race conditions*) en reservas concurrentes. |
-| **Autenticación** | **JWT (Spring Security)** | Mecanismo único, *stateless* y centralizado de autenticación para los tres roles del sistema (`Superadmin`, `Admin de Empresa` y `Cliente`). |
-| **Notificaciones** | **NotificationService** *(Desacoplado)* | Servicio desacoplado pensado para canal objetivo WhatsApp, con Email como mecanismo de *fallback*. *(Proveedor concreto a investigar).* |
+| **Autenticación** | **JWT (Spring Security)** | Dos JWT *stateless* independientes: uno para el panel de sistema (`SUPERADMIN` / `COMPANY_ADMIN`) y uno por sesión de cliente, atado a una `companyId` puntual. |
+| **Notificaciones** | **NotificationService** *(Desacoplado)* | Canal objetivo: WhatsApp (proveedor a definir). Si no se llega a implementar a tiempo, se reemplaza por mail — es una decisión de proyecto, no un fallback en tiempo real. |
 | **Deploy Backend** | **Render** *(Free Tier)* | Plataforma de despliegue gratuita adecuada para el alcance de la tesis. |
 | **Deploy Frontend** | **Vercel** | Despliegue continuo de alto rendimiento y sin complicaciones de configuración para la escala del proyecto. |
 | **CI/CD** | **GitHub Actions** | Automatización de flujos de trabajo para la ejecución de tests automáticos en cada *Pull Request*. |
@@ -42,15 +42,14 @@ A continuación se detallan las herramientas, marcos de trabajo e infraestructur
 
 ### 🔔 Servicio de Notificaciones
 ```text
-[ Evento: Reserva / Cancelación ]
+[ Evento: Reserva / Cancelación / Reprogramación ]
                │
                ▼
    NotificationService (Desacoplado)
                │
-      ┌────────┴────────┐
-      ▼                 ▼
-  [ WhatsApp ] ──► (Fallback) ──► [ Email ]
- (Principal)                      (Reserva)
+               ▼
+          [ WhatsApp ]
+        (canal objetivo)
 
 ```
 

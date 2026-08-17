@@ -23,7 +23,7 @@
 13. Un turno cancelado no puede reactivarse desde "Mis turnos" del cliente; si quiere el mismo horario debe reservarlo de nuevo (sujeto a disponibilidad).
 
 ### Turnos manuales (sin cuenta)
-14. El admin puede cargar un turno manualmente con los datos de un cliente que no tiene cuenta en la plataforma (nombre, teléfono). Ese cliente no puede autogestionar el turno desde "Mis turnos"; para cancelarlo debe contactar al negocio, y es el admin quien lo cancela desde el turnero.
+14. Al cargar un turno manualmente, el admin indica si el cliente tiene cuenta en la plataforma. Si tiene, lo busca y selecciona desde un desplegable, y el turno queda vinculado a su `clientId` — después puede loguearse y autogestionarlo desde "Mis turnos" como cualquier otro. Si no tiene cuenta, el admin carga sus datos sueltos (nombre, teléfono) sin `clientId`; en ese caso, para cancelarlo debe contactar al negocio, y es el admin quien lo cancela desde el turnero.
 
 ### Servicios y horarios
 15. Desactivar un servicio con turnos futuros asociados no cancela esos turnos: dejan de ofrecerse a nuevas reservas, pero los ya reservados se mantienen y se atienden con normalidad. Cancelarlos, si el admin lo decide, es una acción manual aparte.
@@ -36,3 +36,6 @@
 18. No se maneja dinero dentro del sistema (sin señas ni pagos online): se descartó explícitamente por el riesgo de reintroducir conflictos de doble reserva mientras se espera confirmación de un pago externo.
 19. Fechas/horas de los turnos se almacenan en UTC (Instant/OffsetDateTime en el backend); la conversión a hora local se hace en el frontend.
 20. No se manejan múltiples empleados/profesionales por empresa en esta versión: la disponibilidad es a nivel de negocio, no de persona.
+
+### Historial
+21. Un job programado pasa automáticamente los turnos `PENDING`/`RESCHEDULED` a `COMPLETED` una vez que su `startDateTime` ya pasó. `CANCELLED` es un estado terminal y nunca pasa a `COMPLETED`. "Mis turnos" no tiene una sección de historial aparte: lista todo, ordenable/filtrable por estado, y los turnos `COMPLETED` cumplen esa función.

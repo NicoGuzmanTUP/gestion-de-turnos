@@ -12,16 +12,17 @@ Representa a todos los actores del sistema (Superadministradores, Administradore
 
 > ⚠️ **Regla de Aislamiento de Clientes:** Un cliente que reserva en dos empresas distintas posee dos registros independientes de `User`, manteniendo el aislamiento total por `companyId`.
 
-| Atributo | Tipo de Dato | Restricciones | Descripción |
-| :--- | :--- | :--- | :--- |
-| `id` | `UUID` / `Long` | **PK**, Not Null | Identificador único del usuario. |
+| Atributo    | Tipo de Dato | Restricciones | Descripción |
+|:------------| :--- | :--- | :--- |
+| `id`        | `UUID` / `Long` | **PK**, Not Null | Identificador único del usuario. |
 | `firstName` | `String` | Not Null | Nombre del usuario. |
-| `lastName` | `String` | Not Null | Apellido del usuario. |
-| `email` | `String` | Not Null | Credencial de login. Único por empresa. *(Para `SUPERADMIN` es único global).* |
-| `password` | `String` | Not Null | Hash de la contraseña (nunca en texto plano). |
-| `role` | `Enum` | Not Null | Valores posibles: `SUPERADMIN`, `COMPANY_ADMIN`, `CLIENT`. |
+| `lastName`  | `String` | Not Null | Apellido del usuario. |
+| `email`     | `String` | Not Null | Credencial de login. Único por empresa. *(Para `SUPERADMIN` es único global).* |
+| `phone`      | `String` | Not Null | Teléfono de contacto. Es el dato que usa `NotificationService` para enviar por WhatsApp (activación de cuenta para admins, confirmaciones/cancelaciones/reprogramaciones para clientes). |
+| `password`  | `String` | Not Null | Hash de la contraseña (nunca en texto plano). |
+| `role`      | `Enum` | Not Null | Valores posibles: `SUPERADMIN`, `COMPANY_ADMIN`, `CLIENT`. |
 | `companyId` | `UUID` / `Long` | **FK** (`Company`), Nullable | Nulo **solo** para `SUPERADMIN`. Atado a la empresa correspondiente. |
-| `status` | `Enum` | Not Null | Valores posibles: `PENDING_ACTIVATION`, `ACTIVE`, `INACTIVE`. |
+| `status`    | `Enum` | Not Null | Valores posibles: `PENDING_ACTIVATION`, `ACTIVE`, `INACTIVE`. |
 
 ---
 
@@ -86,15 +87,15 @@ Registro de las citas o reservas solicitadas en el sistema.
 | :--- | :--- | :--- | :--- |
 | `id` | `UUID` / `Long` | **PK**, Not Null | Identificador único del turno. |
 | `companyId` | `UUID` / `Long` | **FK** (`Company`), Not Null | Empresa en la que se efectúa la reserva. |
-| `serviceId` | `UUID` / `Long` | **FK** (`Service`), Not Null | Servicio reservado (define duración y precio). |
-| `clientId` | `UUID` / `Long` | **FK** (`User`), Nullable | Usuario cliente que reserva. Nulo si es reserva manual del admin. |
-| `manualClientName` | `String` | Nullable | Usado solo si `clientId` es `NULL` (carga telefónica/manual). |
-| `manualClientPhone` | `String` | Nullable | Teléfono de contacto para clientes sin cuenta registrada. |
-| `startDateTime` | `Instant` / `OffsetDateTime` | Not Null | Fecha y hora exacta de inicio del turno (UTC). |
-| `previousStartDateTime` | `Instant` / `OffsetDateTime` | Nullable | Horario previo en caso de haber sido reprogramado. |
-| `status` | `Enum` | Not Null | Valores: `PENDING`, `CANCELLED`, `RESCHEDULED`. |
-| `cancelledBy` | `Enum` | Nullable | Quién canceló el turno: `CLIENT` o `COMPANY`. |
-| `cancellationReason` | `String` | Nullable | Explicación en texto libre sobre el motivo de la cancelación. |
+| `serviceId` | `UUID` / `Long` | **FK** (`Service`), Not Null | Servicio reservado (define duración y precio).                                                                                                                                                                                                              |
+| `clientId` | `UUID` / `Long` | **FK** (`User`), Nullable | Cliente que reserva, si tiene cuenta vinculada. Nulo en reservas manuales cargadas por el admin para un cliente sin cuenta (ver `manualClientName`/`manualClientPhone`).                                                                                    |
+| `manualClientName` | `String` | Nullable | Usado solo si `clientId` es `NULL`: nombre del cliente sin cuenta, cargado por el admin.                                                                                                                                                                    |
+| `manualClientPhone` | `String` | Nullable | Usado solo si `clientId` es `NULL`: teléfono de contacto del cliente sin cuenta.                                                                                                                                                                            |
+| `startDateTime` | `Instant` / `OffsetDateTime` | Not Null | Fecha y hora exacta de inicio del turno (UTC).                                                                                                                                                                                                              |
+| `previousStartDateTime` | `Instant` / `OffsetDateTime` | Nullable | Horario previo en caso de haber sido reprogramado.                                                                                                                                                                                                          |
+| `status` | `Enum` | Not Null | `PENDING`, `RESCHEDULED`, `COMPLETED`, `CANCELLED`. Un job programado pasa el turno a `COMPLETED` automáticamente cuando su `startDateTime` ya pasó (desde `PENDING` o `RESCHEDULED`). `CANCELLED` es el único estado terminal: nunca pasa a `COMPLETED`.   |
+| `cancelledBy` | `Enum` | Nullable | Quién canceló el turno: `CLIENT` o `COMPANY`.                                                                                                                                                                                                               |
+| `cancellationReason` | `String` | Nullable | Explicación en texto libre sobre el motivo de la cancelación.                                                                                                                                                                                               |
 
 ---
 

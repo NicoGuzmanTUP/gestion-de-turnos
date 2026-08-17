@@ -104,3 +104,5 @@ Necesarios para levantar el entorno con un superadmin, un par de empresas de eje
 - Formatter y linter (Spotless, Checkstyle) integrados en CI.
 - Manejo centralizado de errores (`@RestControllerAdvice`) y formato del cuerpo de error.
 - Documentación de la API (Swagger / OpenAPI).
+- Job programado (ej. `@Scheduled`) para transicionar turnos a `COMPLETED` una vez pasado su `startDateTime`.
+- Endpoint de búsqueda de clientes (por nombre/teléfono/email) para vincular turnos manuales a una cuenta existente.
