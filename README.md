@@ -49,3 +49,10 @@ Java + Spring Boot (backend), React + TypeScript (frontend), PostgreSQL. Detalle
 ## 5. Estado del proyecto
 
 En etapa de documentación y diseño previo al desarrollo. `backend/` y `frontend/` todavía no tienen código.
+
+## 6. Equipo
+
+**Grupo 140**
+
+- Giorda, Brunella de Lourdes
+- Guzmán Olariaga, Facundo Nicolás
