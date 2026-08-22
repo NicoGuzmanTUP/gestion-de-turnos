@@ -117,3 +117,74 @@ Registro de las citas o reservas solicitadas en el sistema.
               └──────────────┘
 
 ```
+
+## 🔗 Diagrama Entidad Relación - Detallado
+
+```mermaid
+erDiagram
+COMPANY ||--o{ BUSINESS_HOURS : tiene
+COMPANY ||--o{ SERVICE : ofrece
+COMPANY ||--o{ APPOINTMENT : tiene
+COMPANY ||--o{ USER : tiene
+SERVICE ||--o{ APPOINTMENT : "es reservado en"
+USER ||--o{ APPOINTMENT : reserva
+
+    COMPANY {
+        UUID id PK
+        String name
+        String slug UK
+        String description
+        String address
+        String phone
+        String contactEmail
+        String category
+        String logoUrl
+        String primaryColor
+        Enum status
+    }
+
+    USER {
+        UUID id PK
+        String firstName
+        String lastName
+        String email
+        String phone
+        String password
+        Enum role
+        UUID companyId FK
+        Enum status
+    }
+
+    SERVICE {
+        UUID id PK
+        UUID companyId FK
+        String name
+        String description
+        Decimal price
+        Int durationMinutes
+        Enum status
+    }
+
+    BUSINESS_HOURS {
+        UUID id PK
+        UUID companyId FK
+        Enum dayOfWeek
+        Time startTime
+        Time endTime
+        Int intervalMinutes
+    }
+
+    APPOINTMENT {
+        UUID id PK
+        UUID companyId FK
+        UUID serviceId FK
+        UUID clientId FK
+        String manualClientName
+        String manualClientPhone
+        DateTime startDateTime
+        DateTime previousStartDateTime
+        Enum status
+        Enum cancelledBy
+        String cancellationReason
+    }
+```
