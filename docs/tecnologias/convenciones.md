@@ -17,6 +17,7 @@ Convenciones **transversales** a todo el proyecto. Lo específico de cada stack 
 - **Entidades y atributos en el código:** inglés, `PascalCase` para clases y `camelCase` para atributos, según el [diccionario de datos](diccionario-datos.md).
 - **Tablas y columnas en PostgreSQL:** `snake_case` (`company_id`, `start_date_time`). Es la convención estándar del motor; Hibernate hace la traducción automáticamente con su estrategia de nombres por defecto, así que no hace falta anotar cada columna a mano.
 - **Enums:** `SCREAMING_SNAKE_CASE` en inglés (`PENDING_ACTIVATION`, `COMPANY_ADMIN`).
+- **Enums en la base:** se persisten como `varchar` + `CHECK`, con `@Enumerated(EnumType.STRING)` en la entidad JPA. No se usan los tipos `ENUM` nativos de PostgreSQL: requieren manejo especial en Hibernate y un `ALTER TYPE` para agregar cada valor. Detalle en [esquema de base de datos](esquema-bd.md).
 
 ## Flujo de trabajo con Git
 
