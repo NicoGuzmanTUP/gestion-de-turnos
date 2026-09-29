@@ -25,6 +25,7 @@ Convenciones **transversales** a todo el proyecto. Lo específico de cada stack 
 - **Ramas:** `<tipo>/<descripción-corta>` en kebab-case — ej. `feat/appointment-booking`, `fix/overlap-validation`.
 - **Commits:** formato [Conventional Commits](https://www.conventionalcommits.org/) — `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`.
 - **Pull Requests:** ningún merge a `main` sin revisión del otro desarrollador. La documentación afectada se actualiza en el mismo PR que el código.
+- **Antes de abrir un PR:** correr localmente los checks del proyecto tocado, que son los mismos que corre el CI. Backend: `./mvnw verify` desde `backend/` (requiere Docker corriendo).
 
 ## Calidad de código
 
