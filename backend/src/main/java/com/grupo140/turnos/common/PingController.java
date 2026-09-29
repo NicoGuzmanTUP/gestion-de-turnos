@@ -1,7 +1,6 @@
 package com.grupo140.turnos.common;
 
 import java.util.Map;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

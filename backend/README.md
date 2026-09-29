@@ -20,7 +20,7 @@ curl http://localhost:8080/ping             # {"status":"ok"}
 curl http://localhost:8080/actuator/health  # {"status":"UP"}
 ```
 
-Tests: `./mvnw test`. Necesitan la base levantada.
+Tests y formato: `./mvnw verify`. No necesitan la base local: los de integración levantan su propio PostgreSQL con Testcontainers (solo hace falta Docker corriendo). Si falla el formato, `./mvnw spotless:apply` lo corrige.
 
 Para frenar la base: `docker compose down` (los datos quedan en el volumen; `-v` los borra).
 
@@ -269,7 +269,21 @@ El DDL de referencia está en [esquema-bd.md](../docs/tecnologias/esquema-bd.md)
 
 **Decidido: Testcontainers** (`postgres:18`, la misma versión que Neon y que el `docker-compose.yml`), por los cuatro puntos de arriba. Los tests que los cubren son US-07.3 (lock pesimista) y T-12.4 (los otros tres).
 
-**Pendiente:** definir si se exige una cobertura mínima en CI.
+**Cobertura:** no se exige un mínimo en CI. Los tests cubren solo los componentes principales listados arriba, y un porcentaje global bloquearía cualquier PR de CRUD sin tests.
+
+## Integración continua
+
+Workflows en [`.github/workflows`](../.github/workflows). En cada PR contra `main`:
+
+| Check | Workflow | Qué verifica | Bloquea |
+| :--- | :--- | :--- | :--- |
+| Build, tests y formato | `backend-ci.yml` | `./mvnw verify`: compila, corre unitarios (`*Test`) e integración (`*IT`) contra PostgreSQL 18, aplica las migraciones de Flyway sobre base limpia y chequea formato con Spotless. | Sí |
+| Migraciones inmutables | `backend-ci.yml` | Que el PR no modifique, renombre ni borre un `V*.sql` existente. | Sí |
+| Imagen Docker | `backend-ci.yml` | Que el `Dockerfile` construya (es lo que despliega Render). Escanea la imagen con Trivy, solo informativo. | Sí (el build) |
+| CodeQL (java) | `codeql.yml` | Análisis estático de seguridad. También corre semanalmente. | Sí |
+| Dependency review | `dependency-review.yml` | Que el PR no agregue dependencias con CVEs altas o críticas. | Sí |
+
+Los jobs de `backend-ci.yml` se saltean si el PR no toca `backend/`; un job salteado cuenta como aprobado. Dependabot abre PRs semanales para Maven, la imagen base de Docker y las actions (fijadas por SHA).
 
 ## Seeds y datos de prueba
 
@@ -281,7 +295,7 @@ Necesarios para levantar el entorno con un superadmin, la fila de `platform_sett
 
 ## Pendiente de definir
 
-- Formatter y linter (Spotless, Checkstyle), para sumar al workflow de CI que monta T-01.4.
+- Linter (Checkstyle o similar). El formatter ya está: Spotless con palantir-java-format, en `mvn verify`.
 - Formato exacto del cuerpo de error que devuelve el `@RestControllerAdvice` de US-03.10.
 - Documentación de la API (Swagger / OpenAPI).
 - Proveedor de la API de WhatsApp Business.
