@@ -1,5 +1,5 @@
 # Etapa 1: compila el .jar y se descarta
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
@@ -8,7 +8,7 @@ COPY src/ src/
 RUN ./mvnw clean package -DskipTests -B
 
 # Etapa 2: la imagen que corre en Render
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 ENV TZ=UTC
 COPY --from=build /app/target/*.jar app.jar
