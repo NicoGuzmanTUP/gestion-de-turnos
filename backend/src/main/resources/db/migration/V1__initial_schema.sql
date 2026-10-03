@@ -18,7 +18,7 @@ CREATE TABLE platform_settings (
   min_booking_notice_minutes    integer      NOT NULL DEFAULT 30,
   cancellation_deadline_hours   integer      NOT NULL DEFAULT 3,
   max_reschedule_count          integer      NOT NULL DEFAULT 2,
-  max_booking_advance_days      integer      NOT NULL DEFAULT 90, -- override posible via variable de entorno al arrancar
+  max_booking_advance_days      integer      NOT NULL DEFAULT 90,
   updated_at                    timestamptz  NOT NULL DEFAULT now(),
 
   CONSTRAINT chk_settings_singleton    CHECK (id = 1),
