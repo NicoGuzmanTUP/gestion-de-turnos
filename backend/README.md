@@ -283,7 +283,7 @@ Workflows en [`.github/workflows`](../.github/workflows). En cada PR contra `mai
 | CodeQL (java) | `codeql.yml` | Análisis estático de seguridad. También corre semanalmente. | Sí |
 | Dependency review | `dependency-review.yml` | Que el PR no agregue dependencias con CVEs altas o críticas. | Sí |
 
-Los jobs de `backend-ci.yml` se saltean si el PR no toca `backend/`; un job salteado cuenta como aprobado. Dependabot abre PRs semanales para Maven, la imagen base de Docker y las actions (fijadas por SHA).
+Los jobs de `backend-ci.yml` se saltean si el PR no toca `backend/`; un job salteado cuenta como aprobado. Dependabot solo abre PRs cuando una dependencia tiene una vulnerabilidad conocida (*Dependabot security updates*, activado en la configuración del repo). No hay actualizaciones de versión periódicas: las actions fijadas por SHA se actualizan a mano.
 
 ## Seeds y datos de prueba
 
