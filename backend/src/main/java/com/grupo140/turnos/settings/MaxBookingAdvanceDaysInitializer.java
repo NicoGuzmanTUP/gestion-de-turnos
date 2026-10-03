@@ -21,8 +21,7 @@ public class MaxBookingAdvanceDaysInitializer implements ApplicationRunner {
     private final Integer override;
 
     public MaxBookingAdvanceDaysInitializer(
-            PlatformSettingsRepository repository,
-            @Value("${MAX_BOOKING_ADVANCE_DAYS:#{null}}") Integer override) {
+            PlatformSettingsRepository repository, @Value("${MAX_BOOKING_ADVANCE_DAYS:#{null}}") Integer override) {
         this.repository = repository;
         this.override = override;
     }
