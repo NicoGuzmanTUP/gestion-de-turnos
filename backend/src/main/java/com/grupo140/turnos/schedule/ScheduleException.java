@@ -36,9 +36,9 @@ public class ScheduleException {
     private LocalDate exceptionDate;
 
     @Column(name = "is_closed", nullable = false)
-    private boolean closed = true;
+    private boolean isClosed = true;
 
-    // Los tres siguientes son nulos si closed = true y obligatorios si closed = false (CHECK en la base).
+    // Los tres siguientes son nulos si isClosed = true y obligatorios si isClosed = false (CHECK en la base).
     @Column(name = "start_time")
     private LocalTime startTime;
 
@@ -74,7 +74,7 @@ public class ScheduleException {
             UUID companyId, LocalDate exceptionDate, LocalTime startTime, LocalTime endTime, Integer intervalMinutes) {
         this.companyId = companyId;
         this.exceptionDate = exceptionDate;
-        this.closed = false;
+        this.isClosed = false;
         this.startTime = startTime;
         this.endTime = endTime;
         this.intervalMinutes = intervalMinutes;
@@ -97,34 +97,34 @@ public class ScheduleException {
     }
 
     public boolean isClosed() {
-        return closed;
-    }
-
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+        return isClosed;
     }
 
     public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
     public LocalTime getEndTime() {
         return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
     }
 
     public Integer getIntervalMinutes() {
         return intervalMinutes;
     }
 
-    public void setIntervalMinutes(Integer intervalMinutes) {
+    // Marca el día como cerrado y borra el horario especial.
+    public void closeAllDay() {
+        this.isClosed = true;
+        this.startTime = null;
+        this.endTime = null;
+        this.intervalMinutes = null;
+    }
+
+    // Marca el día como abierto con un horario especial.
+    public void openWith(LocalTime startTime, LocalTime endTime, Integer intervalMinutes) {
+        this.isClosed = false;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.intervalMinutes = intervalMinutes;
     }
 
