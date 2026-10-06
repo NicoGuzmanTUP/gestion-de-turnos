@@ -145,6 +145,8 @@ La entidad de dominio se llama `Service` (ver [diccionario de datos](../docs/tec
 
 **Propuesta:** el paquete se llama `catalog`, las clases de aplicación son `CatalogController` / `CatalogService`, y la entidad JPA mantiene el nombre `Service`.
 
+La anotación `@Service` de Spring también choca con la entidad. En los archivos de `catalog` que usen las dos, la anotación se escribe con el nombre completo (`@org.springframework.stereotype.Service`) y la entidad se usa normal.
+
 ## Regla de capas (vertical)
 
 **Ésta es la regla que evita el código spaghetti. Si se respeta, casi todo lo demás se acomoda solo.**
