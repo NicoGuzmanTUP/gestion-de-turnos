@@ -178,15 +178,18 @@ reporting ──┐
 appointment ┼──► schedule ──► company ──► settings
             │        │           ▲
 user ───────┘     catalog ───────┘
-                                 ▲
+ ▲                               ▲
 auth ────────────────────────────┘
 
 notification   ← hoja: no depende de ningún feature de negocio
 common, config ← transversales: cualquiera puede usarlos, ellos no usan a nadie
+seed           ← solo perfil dev: fuera del grafo (ver excepción abajo)
 ```
 
 - ❌ Un feature **nunca** importa un repository de otro feature: se habla con su `Service`.
 - ❌ No se permiten ciclos. Si aparece uno, se resuelve invirtiendo la dependencia o moviendo la lógica.
+- ✅ `auth` depende de `user`: el login y la activación leen y actualizan `User`, pero a través de los services de `user`, nunca de `UserRepository`.
+- ⚠️ **Única excepción: el paquete `seed`** (T-02.4). Corre solo con `@Profile("dev")` y carga datos de prueba de varios features, así que puede usar sus repositories directamente. Nada de código de producción importa `seed`, y `seed` no expone nada para los demás features.
 
 ### Los dos casos concretos que esta regla resuelve
 
