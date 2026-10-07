@@ -114,7 +114,8 @@ src/main/java/com/<grupo>/turnos/
 ├── schedule/          # BusinessHours + ScheduleException: plantilla de atención
 ├── appointment/       # Appointment: disponibilidad, reserva, cancelación, reprogramación
 ├── notification/      # NotificationService desacoplado del canal + reintentos
-└── reporting/         # dashboards del superadmin y del admin de empresa
+├── reporting/         # dashboards del superadmin y del admin de empresa
+└── seed/              # datos de prueba, solo con el perfil dev
 ```
 
 Dentro de cada feature:
@@ -292,11 +293,29 @@ Los jobs de `backend-ci.yml` se saltean si el PR no toca `backend/`; un job salt
 
 ## Seeds y datos de prueba
 
-> ⏳ *A definir.*
+`seed/DevDataSeeder` carga los datos mínimos al arrancar, para poder probar el login, la activación de cuenta, los servicios y los horarios sin crear esos datos a mano. Corre solo con el perfil `dev`: en Render (`prod`) la clase no existe.
 
-Necesarios para levantar el entorno con un superadmin, la fila de `platform_settings`, un par de empresas de ejemplo con servicios, horarios y alguna excepción de calendario cargada, y turnos en distintos estados. A resolver: mecanismo (migración `R__seed.sql` de Flyway limitada al perfil de desarrollo, o un `CommandLineRunner` por perfil) y cómo se aísla del entorno productivo.
+Si la empresa `barberia-central` ya está en la base, no hace nada, así que un segundo arranque no duplica datos. Para recargarlo desde cero: `docker compose down -v` y volver a levantar.
 
-> La fila única de `platform_settings` **no es un seed opcional**: la inserta la migración inicial, porque la aplicación la asume siempre presente.
+| Dato | Detalle |
+| :--- | :--- |
+| Empresa | Barbería Central (`/barberia-central`), rubro `BARBERSHOP` |
+| Servicios | Corte de pelo (30 min) y Corte y barba (60 min) |
+| Horario | Lunes a viernes 09–13 y 16–20, sábado 09–13, domingo cerrado. Intervalo de 30 min |
+
+| Email | Rol | Estado |
+| :--- | :--- | :--- |
+| `superadmin@example.com` | `SUPERADMIN` | `ACTIVE` |
+| `admin@example.com` | `COMPANY_ADMIN` | `ACTIVE` |
+| `admin.pendiente@example.com` | `COMPANY_ADMIN` | `PENDING_ACTIVATION` (sin contraseña, con token de activación) |
+| `cliente1@example.com` | `CLIENT` | `ACTIVE` |
+| `cliente2@example.com` | `CLIENT` | `ACTIVE` |
+
+La contraseña de los usuarios activos y el valor del token de activación están en las constantes `DEV_PASSWORD` y `DEV_ACTIVATION_TOKEN` de `DevDataSeeder`.
+
+Los datos de demo para la presentación (más empresas y turnos en distintos estados) se cargan más adelante, antes del despliegue final.
+
+> La fila única de `platform_settings` **no es parte del seed**: la inserta la migración inicial, porque la aplicación la asume siempre presente.
 
 ## Pendiente de definir
 
