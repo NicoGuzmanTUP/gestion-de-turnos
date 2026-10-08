@@ -293,9 +293,38 @@ Los jobs de `backend-ci.yml` se saltean si el PR no toca `backend/`; un job salt
 
 ## Seeds y datos de prueba
 
-`seed/DevDataSeeder` carga los datos mínimos al arrancar, para poder probar el login, la activación de cuenta, los servicios y los horarios sin crear esos datos a mano. Corre solo con el perfil `dev`: en Render (`prod`) la clase no existe.
+`seed/DevDataSeeder` carga los datos mínimos al arrancar, para poder probar el login, la activación de cuenta, los servicios y los horarios sin crear esos datos a mano. 
+**No corre solo.** Necesita dos condiciones a la vez: el perfil `dev` y la propiedad `app.seed.enabled=true`. Si falta cualquiera de las dos, el bean no se crea.
 
-Si la empresa `barberia-central` ya está en la base, no hace nada, así que un segundo arranque no duplica datos. Para recargarlo desde cero: `docker compose down -v` y volver a levantar.
+```bash
+# bash
+APP_SEED_ENABLED=true ./mvnw spring-boot:run
+```
+
+```powershell
+# PowerShell
+$env:APP_SEED_ENABLED='true'; .\mvnw.cmd spring-boot:run
+```
+
+> ⚠️ `app.seed.enabled` **no se define en ningún `application*.yml`**, a propósito. `dev` es el perfil por defecto: si en Render faltara `SPRING_PROFILES_ACTIVE=prod`, la aplicación arrancaría en `dev` contra Neon. Con la propiedad en un archivo, el seed correría ahí y crearía usuarios con una contraseña que está en el repositorio. Pasándola a mano, solo existe en la máquina de quien la escribe.
+
+Si la empresa `barberia-central` ya está en la base, no hace nada, así que un segundo arranque no duplica datos.
+
+Para recrear la base local desde cero con el seed cargado (por ejemplo, para volver a tener el token de activación sin usar), son tres comandos. Borran **toda** la base local, no solo los datos del seed:
+
+```bash
+# bash
+docker compose down -v
+docker compose up -d --wait
+APP_SEED_ENABLED=true ./mvnw spring-boot:run
+```
+
+```powershell
+# PowerShell
+docker compose down -v
+docker compose up -d --wait
+$env:APP_SEED_ENABLED='true'; .\mvnw.cmd spring-boot:run
+```
 
 | Dato | Detalle |
 | :--- | :--- |

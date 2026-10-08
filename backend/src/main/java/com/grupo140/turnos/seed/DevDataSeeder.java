@@ -25,6 +25,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -32,11 +33,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Carga los datos mínimos para probar el login, la activación de cuenta, los servicios y los horarios
- * sin tener que crear esos datos a mano. Corre en cada arranque, solo con el perfil {@code dev}.
+ * sin tener que crear esos datos a mano.
+ *
+ * <p>Corre al arrancar solo si se cumplen dos condiciones: el perfil es {@code dev} y además se pide
+ * con {@code app.seed.enabled=true}.
  *
  * <p>Decisiones:
  *
  * <ul>
+ *   <li>El perfil solo no alcanza porque {@code dev} es el perfil por defecto: si en producción faltara
+ *       {@code SPRING_PROFILES_ACTIVE}, la aplicación arrancaría en {@code dev} contra la base real y
+ *       crearía usuarios con una contraseña que está escrita en este archivo. Por eso
+ *       {@code app.seed.enabled} no se define en ningún {@code application*.yml}: se pasa a mano al
+ *       arrancar en local.
  *   <li>Si la empresa de ejemplo ya existe, no hace nada: un segundo arranque no duplica datos.
  *   <li>Todo se guarda en una sola transacción: si algo falla, no queda un seed a medias.
  *   <li>Las contraseñas se encriptan con el {@link PasswordEncoder} del sistema, el mismo del login.
@@ -48,6 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Profile("dev")
+@ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")
 public class DevDataSeeder implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DevDataSeeder.class);
