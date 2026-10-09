@@ -97,7 +97,7 @@ Component  ──►  Hook  ──►  api/  ──►  Backend
 | **Hook** | Estado, orquestación y consumo de `api/`, con **TanStack Query**. | No arma URLs ni headers a mano. |
 | **`api/`** | Llamadas HTTP, tipado de request/response, manejo de errores. | No conoce React ni componentes. |
 
-> Hoy hay un único ejemplo de la cadena: `App.tsx` → `hooks/usePing.ts` → `api/ping.ts` (T-01.3). Ese hook usa `useState`/`useEffect` porque es un solo llamado sin caché; TanStack Query se instala con el primer hook que consuma datos reales del dominio.
+> Ejemplo de la cadena: `pages/LoginPage.tsx` → `hooks/useLogin.ts` → `api/auth.ts`.
 
 Reglas duras:
 
