@@ -12,7 +12,7 @@ El objetivo es cerrar el proyecto a tiempo. Para eso se prioriza el núcleo que 
 
 | Ítem del roadmap | Decisión | Alcance que queda | Responsable |
 | :--- | :--- | :--- | :--- |
-| US-03.7 — Admin recupera su contraseña y US-03.8 — Cliente recupera su contraseña | Pospuestas juntas (opcionales) | Comparten el mecanismo de token y mail de la activación (US-03.4): si sobra tiempo al final del Paso 3, se hacen en un solo PR. Mientras tanto, un admin sin acceso puede pedir ayuda al superadmin, y un cliente que olvida su contraseña no tiene cómo recuperarla: se acepta para el MVP. | Nico |
+| US-03.7 — Admin recupera su contraseña y US-03.8 — Cliente recupera su contraseña | Pospuestas juntas (opcionales) | Comparten el mecanismo de token y envío del link de la activación (US-03.4: por WhatsApp, con mail solo como reemplazo si no se llega con WhatsApp): si sobra tiempo al final del Paso 3, se hacen en un solo PR. Mientras tanto, un admin sin acceso puede pedir ayuda al superadmin, y un cliente que olvida su contraseña no tiene cómo recuperarla: se acepta para el MVP. | Nico |
 | US-03.9 y US-03.10 | Unificadas con US-03.1/US-03.2 | Se entregan en un solo PR de autenticación: login, JWT, `companyId` de la sesión y formato único de error. Mismo alcance, menos ciclos de review. | Nico |
 | US-04.6 — Dashboard del superadmin | Reducida | Dos indicadores: empresas activas/inactivas y cantidad total de turnos. Sin altas por mes, sin ranking por empresa, sin distribución por rubro y sin gráficos. | Brune (back) / Nico (front) |
 | T-12.3 — Cobertura de tests por regla de negocio | Reducida | Tests solo de las reglas críticas: cálculo de disponibilidad (incluida la zona horaria), concurrencia y doble reserva, anticipación mínima y plazos de cancelación y reprogramación. No se recorre regla por regla. | Nico y Brune |
@@ -263,7 +263,7 @@ Dependencias: US-03.5.
 
 #### US-03.7 — Admin recupera su contraseña olvidada
 
-> ✂️ **Alcance MVP:** **pospuesta (opcional)**, junto con US-03.8. Comparten el mecanismo de token y mail de la activación (US-03.4): si sobra tiempo al final del Paso 3, se hacen las dos en un solo PR. Mientras tanto, un admin sin acceso pide ayuda al superadmin.
+> ✂️ **Alcance MVP:** **pospuesta (opcional)**, junto con US-03.8. Comparten el mecanismo de token y envío del link de la activación (US-03.4: por WhatsApp, con mail solo como reemplazo si no se llega con WhatsApp): si sobra tiempo al final del Paso 3, se hacen las dos en un solo PR. Mientras tanto, un admin sin acceso pide ayuda al superadmin.
 
 Como admin de empresa con cuenta ya activa, quiero pedir un link de recuperación de contraseña desde el login, para poder volver a entrar si la olvidé.
 
